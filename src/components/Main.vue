@@ -2,7 +2,7 @@
   <div>
     <my-header :cartItemCount="cartItemCount"></my-header>
     <main>
-      <div v-for="product in products" v-bind:key="product">
+      <div class="container" v-for="product in products" v-bind:key="product">
         <div class="row">
           <div class="col-md-5 col-md-offset-0">
             <figure>
@@ -83,23 +83,25 @@ export default {
       return this.cart.length || '';
     },
 
-    // sortedProducts() {
-    //   if (this.products.length > 0) {
-    //     let productsArray = this.products.slice(0);
-    //
-    //     function compare(a, b) {
-    //       if (a.title.toLowerCase() < b.title.toLowerCase()) {
-    //         return -1;
-    //       }
-    //       if (a.title.toLowerCase() > b.title.toLowerCase()) {
-    //         return 1;
-    //       }
-    //       return 0;
-    //     }
-    //
-    //     return productsArray.sort(compare);
-    //   }
-    // }
+    compare(a, b) {
+      if (a.title.toLowerCase() < b.title.toLowerCase()) {
+        return -1;
+      }
+      if (a.title.toLowerCase() > b.title.toLowerCase()) {
+        return 1;
+      }
+      return 0;
+    },
+
+    sortedProducts() {
+      if (this.products.length > 0) {
+        let productsArray = this.products.slice(0);
+
+        return productsArray.sort(this.compare);
+      }
+
+      return undefined
+    },
   },
   filters: {
     formatPrice(price) {
@@ -121,7 +123,7 @@ export default {
     }
   },
   created: function () {
-    this.axios.get('@/products.json').then(response => {
+    this.axios.get('../public/products.json').then(response => {
       this.products = response.data.products;
       console.log(this.products);
     });
