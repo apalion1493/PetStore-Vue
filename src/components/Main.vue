@@ -10,7 +10,7 @@
             </figure>
           </div>
           <div class="col-md-6 col-md-offset-0 description">
-            <router-link tag="h1" :to="{ name : 'Id', params: {id: product.id}}">{{ product.title }}</router-link>
+            <router-link v-bind:class="'title'" tag="h1" :to="{ name : 'Id', params: {id: product.id}}">{{ product.title }}</router-link>
             <p v-html="product.description"></p>
             <p class="price">
               {{ product.price | formatPrice }}
@@ -51,6 +51,7 @@ export default {
   components: {MyHeader},
   data() {
     return {
+      baseUrl: process.env.VUE_APP_BASE_URL,
       products: [],
       cart: []
     }
@@ -123,9 +124,8 @@ export default {
     }
   },
   created: function () {
-    this.axios.get('../public/products.json').then(response => {
+    this.axios.get(this.baseUrl + 'products.json').then(response => {
       this.products = response.data.products;
-      console.log(this.products);
     });
   }
 }
